@@ -1,0 +1,141 @@
+.block_names {
+    float: left;
+    height: 400px;
+    margin: 4px;
+    max-width: 250px;
+    width:250px;
+    border-top: 2px solid #f65a35;
+    border-right: 1px solid #efeded;
+    border-left: 1px solid #efeded;
+    border-bottom: 1px solid #efeded;
+    background-color: #fff;
+    -weblit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+}
+.block_names__title {
+    text-align:center;
+    font-size: 16px;
+    color:#333;
+}
+.block_names__title a {
+    color:#222;
+    text-decoration: none;
+}
+.block_names__title a:hover {
+    color:#666;
+}
+.block_names__image {
+    width: 100%;
+    height: 330px;
+    overflow: hidden;
+    text-align: center;
+    -weblit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.block_names__image:after {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 100%;
+}
+.block_names__image a {
+    display: inline-block;
+    vertical-align: middle;
+}
+.block_names__image img {
+    max-width: 200px;
+    border: 0;
+}
+.prodlinks_block {
+    color:red;
+    text-align: center;
+    padding: 0 5px 10px;
+    font-size:8px;
+}
+.prlist_block {
+    display: inline-block;
+    vertical-align: top;
+    position: relative;
+    padding: 1px 3px;
+    width: auto;
+    line-height: 20px;
+    -weblit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.prlist_link {
+    display: block;
+    color: #111;
+    font-size:13px;
+    text-align: center;
+    text-decoration: none;
+}
+.prlist_link:hover {
+    color: #fe5f39;
+    text-decoration: underline;
+}  
+.prlist_link__icon {
+    display: none;
+    height: 40px;
+    color: #999;
+    line-height: 40px;
+}
+.prlist_link__icon img {
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+.prlist_link__title {
+    display: block;
+    overflow: hidden;
+    line-height: 20px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.nature {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 26px;
+    margin: -40px auto 0;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+.nature_text {
+    display: inline-block;
+    padding: 3px;
+    background: #ef7a57;
+}
+
+.block_names__image .nature {
+    top: 150px;
+}
+
+/*
+ul.words_cel {
+    list-style: none;
+}
+
+ul.words_cel li {
+    width: 50px;
+    display: inline-block;
+    padding: 5px;
+}
+
+ul.words_cel li a {
+    font-size: 24px;
+    color: #444;
+    text-align: center;
+    text-decoration: none;
+}
+
+ul.words_cel li a:hover {
+    color:#b29577;   
+} 
+*/ 

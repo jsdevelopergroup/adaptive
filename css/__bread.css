@@ -1,0 +1,101 @@
+.bread_n_sort {
+
+    width:100%;
+
+    height:35px;
+
+    border-bottom: 1px solid #b6b5b5; 
+
+    background-color: #f9f8f8;
+
+    margin: 0 auto;
+
+}
+
+.bread_n_sort_wr {
+    margin: 0 auto;
+}
+
+.breadcrumb_block, .sort {
+
+    background-color: #f9f8f8;
+
+}
+
+.breadcrumb {
+
+    display: inline-block; 
+
+    float: left;
+
+    margin: 0;
+
+    padding: 0 7px;
+
+    font-weight: 700;
+
+    font-weight: normal;
+
+}
+
+.breadcrumb li {
+
+    position: relative;
+
+    display: inline-block;
+
+    padding: 0 3px 0 28px;
+
+    font-weight: normal;
+
+    font-size: 14px;
+
+    line-height: 35px;
+
+    font-family: 'Rubik', sans-serif;
+
+    color:#333;
+
+}
+
+.breadcrumb li:before {
+
+    content: '\2192';
+
+    position: absolute;
+
+    display: block;
+
+    top: 0;
+
+    left: 3px;
+
+}
+
+.breadcrumb li:first-child{
+
+    padding-left: 3px;
+
+}
+
+.breadcrumb li:first-child::before {
+
+    display: none;
+
+}
+
+.breadcrumb li a {
+
+    color: #EB474E;
+
+    text-decoration: none;
+
+    font-weight: normal;
+
+}
+
+.breadcrumb li a:hover {
+
+    color: #fc8a4c;
+
+}

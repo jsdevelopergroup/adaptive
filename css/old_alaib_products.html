@@ -1,0 +1,27 @@
+    <div class="available_products_block">
+      <div class="products_block_title">Our available products</div>
+      <?foreach($product->productsList as $item):?>
+        <div class="pro-item">
+          <div class="pro-image <?=$item['url_product']?>"></div>
+          <div class="pro-name"><?=$item['title']?></div>
+        </div>
+      <?endforeach;?>
+    </div>
+    
+ 
+    <h1><?=$product->titlePage?></h1>
+    <div class="big_image_block">
+      <img src="<?=$product->imgSrc?>" class="img_shadow" />
+    </div>
+    <div class="add_tocart_block">
+      <div>Cart</div>
+    </div>
+    <div class="available_products_block">
+      <div class="products_block_title">Our available products</div>
+      <?foreach($product->productsList as $item):?>
+        <div class="pro-item">
+          <div class="pro-image <?=$item['url_product']?>"></div>
+          <div class="pro-name"> <?=$item['title']?></div>
+        </div>
+      <?endforeach;?>
+    </div>

@@ -1,0 +1,96 @@
+.big_image_block, .add_tocart_block, .available_products_block {
+    display: inline-block;
+    height:420px;
+    vertical-align:top;
+}
+.big_image_block {
+    position: relative;
+    width:420px;
+    height:420px;
+    background-color: #f4f0ec;
+}
+.img_shadow {
+    position: absolute;
+    box-shadow: 6px 6px 10px -3px rgba(0, 0, 0, .8);
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    margin-bottom: auto;
+    margin-top: auto;
+    bottom: 0;
+    top: 0;
+}
+h1 id {
+    color:#cccccc;
+}
+h1 product {
+    color:#fd5300;
+}
+.available_products_block {
+   width:272px;
+   float:right;
+}
+.products_block_title {
+    color:#333333;
+    font-size:18px;
+    width:100%;
+    height:25px;
+    border-bottom: 1px solid #bab9b9;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.pro-item {
+    width: 130px;
+    height: 70px;
+    display: inline-block;
+    background-color: #f7f7f6;
+    margin: 0 2px 6px 2px;
+    cursor: pointer;
+    border-bottom: 1px solid #999;
+}
+.pro-item:hover {
+    background-color: #fbe0bc;
+}
+.pro-name {
+    text-align: center;
+    height: 20px;
+    color:#111111;
+    font-size:14px;
+}
+.pro-image {
+    background-size: 50px 50px;
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;    
+}
+.case {
+    background-image: url("/Core/Design/Icons/products/icone-case.svg");
+}
+.tshirt {
+    background-image: url("/Core/Design/Icons/products/icone-tshirt.svg");
+}
+.image {
+    background-image: url("/Core/Design/Icons/products/icone-image.svg");
+}
+.pillow {
+    background-image: url("/Core/Design/Icons/products/icone-pillow.svg");
+}
+.mousepad {
+    background-image: url("/Core/Design/Icons/products/icone-mousepad.svg");
+}
+.poster {
+    background-image: url("/Core/Design/Icons/products/icone-poster.svg"); 
+}
+.puzzle {
+    background-image: url("/Core/Design/Icons/products/icone-puzzle.svg");
+}
+.mug {
+    background-image: url("/Core/Design/Icons/products/icone-mug.svg");
+}
+.magnet {
+    background-image: url("/Core/Design/Icons/products/icone-magnet.svg");
+}
+.calendar {
+    background-image: url("/Core/Design/Icons/products/icone-calendar.svg");
+}

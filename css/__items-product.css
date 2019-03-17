@@ -1,0 +1,262 @@
+/* START PRODUCT ITEMS */
+.pro-items-list {
+    text-align: center;
+}
+
+.pro-item {
+
+    display: inline-block;
+
+    border: 1px solid #ccc;
+
+    border-radius: 2px;
+
+    margin: 15px;
+
+    width: 200px;
+
+    height: 240px;
+
+    padding: 12px;
+
+}
+
+.pro-title {
+
+    font-size: 18px;
+
+    text-decoration: underline;
+
+    color: #333;
+
+    text-align: center;
+
+    padding-top: 10px;
+
+    cursor: pointer;
+
+}
+
+.pro-image-area {
+
+    position: relative;
+
+    width: 200px;
+
+    height: 200px;
+
+    display: -webkit-flex;
+
+    display: -moz-flex;
+
+    display: -ms-flex;
+
+    display: -o-flex;
+
+    display: flex;
+
+    -ms-align-items: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    justify-content: center;
+
+}
+
+.pro-image {
+
+    width: auto;
+
+    height: auto;
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    border: 0;
+
+    outline: none;
+
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,.8);
+
+}
+
+.pro-image-bg{
+
+    width: 100%;
+
+    height: 100%;
+
+    box-shadow: none;
+
+    background-repeat: no-repeat;
+
+    background-position: 50% 50%;
+
+    -webkit-background-size: cover;
+
+    background-size: cover;
+
+}
+
+img.pro-image-case.pro-image-h.pro-image-bg{
+    width: auto;
+
+    height: auto;
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    border: 0;
+
+    outline: none;
+}
+
+.pro-image-t-shirt,
+
+.pro-image-tank-top {
+
+    position: absolute;
+
+    top: 52px;
+
+    margin: 0 auto;
+
+    max-width: 34%;
+
+    max-height: 38%;
+
+    box-shadow: none;
+
+    opacity: .89;
+
+    z-index: 2;
+
+}
+
+.pro-image-mousepad {
+
+    border-radius: 15px;
+
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,.8);
+
+}
+
+.pro-image-mousepad.pro-image-v,
+
+.pro-image-mousepad.pro-image-sq {
+
+    width: 86%;
+
+}
+
+.pro-image-mousepad.pro-image-h {
+
+    height: 86%;
+
+}
+
+.pro-image-pillow {
+
+    box-shadow: none;
+
+}
+
+.pro-image-bg.pro-image-v.pro-image-case{
+
+    -webkit-background-size: auto;
+
+    background-size: auto;
+
+}
+
+.mask {
+
+    width: 100%;
+
+    height: 100%;
+
+    margin: 0 auto;
+
+    background-color: transparent;
+
+    background-repeat: no-repeat;
+
+    /*outline: 1px solid antiquewhite;*/
+
+    position: absolute;
+
+    z-index: 2;
+
+}
+
+.poster,
+
+.canvas,
+
+.image {
+
+    visibility: hidden;
+
+    z-index: -1;
+
+}
+
+.case {
+
+    background-image: url("/icons/masks/mobile-case.png");
+
+}
+.mask.case.image-h {
+
+    background-image: url("/icons/masks/mobile-case-gorozont.png");
+}
+
+
+
+.pillow {
+
+    background-size: 100%;
+
+    background-image: url("/icons/masks/pillow.png");
+
+}
+
+.calendar {
+
+    background-image: url("/icons/masks/calendar.png");
+
+}
+
+.t-shirt,
+
+.tank-top {
+
+    position: relative;
+
+    width: 200px;
+
+    height: 200px;
+
+    background-image: url("/icons/masks/t-shirt.png");
+
+    background-position: center top;
+
+    z-index: 1;
+
+}
+
+.puzzle {
+
+    width: 200px;
+
+    height: 200px;
+
+    background-image: url("/icons/masks/puzzle.png");
+
+}
+
+/* END PRODUCT ITEMS */

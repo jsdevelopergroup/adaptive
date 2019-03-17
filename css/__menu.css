@@ -1,0 +1,103 @@
+.navi {
+    padding: 0;
+    width:100%;
+    background-color: #1a130d;
+    position: relative;
+    z-index:120;
+}
+.navi:after{
+    content: '';
+    display: table;
+    clear: both;
+}
+.navi-list {
+    padding: 0;
+    list-style: none;
+    margin: 0;
+    width:1240px;
+}
+.navi-list li {
+    float: left;
+    position: relative;
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+/* Open+Sans|Rubik|Spicy+Rice|Nanum+Gothic|Roboto+Condensed|PT+Sans+Narrow */
+
+.navi_title {
+    padding:10px 0 10px 20px;
+    width:140px;
+    background-color: #515050;
+    font-size:18px;
+    font-weight:bold;
+    color:#ffffff;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.navi-list li ul {
+    margin: 0 auto;
+    padding: 0;
+    /* But! Let's make the background fully transparent where we can, we don't actually want to see it if we can help it... */
+    z-index: 100;
+    list-style: none;
+    position: absolute;
+    display: none;
+    background-color: #111;
+    /* Hide off-screen when not needed (this is more accessible than display:none;) */
+}
+
+.navi-list a {
+    display: block;
+    padding: 8px 8px 9px 8px;
+    color: #efeceb;
+    font-size: 16px;
+    text-decoration: none;
+    font-family: 'Abel', sans-serif;
+    font-weight: normal;
+}
+
+.navi-list li ul li a {
+    width:102px;
+    border-bottom: 1px solid #545353;
+    padding: 8px;
+    color: #efeceb;
+    font-size: 16px;
+    text-decoration: none;
+    font-family: 'PT Sans Narrow', sans-serif;
+    font-weight:normal;
+}
+
+.endline {
+
+}
+
+.navi-list a:hover {
+    color: #f67035;
+    text-decoration: none;
+}
+
+.navi-list li:hover ul {
+    /* Display the dropdown on hover */
+    display: block;
+    /* Bring back on-screen when needed */
+}
+.navi-list li:hover>a {
+    /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+    text-decoration: underline;
+    color: #ffffff;
+}
+
+.close_block {
+    background-image: url("/icons/close.svg");
+    background-size: 30px 30px;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right:36px;
+    top:14px;
+    display: none;
+    z-index:150;
+}

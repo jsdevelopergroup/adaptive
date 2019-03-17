@@ -1,0 +1,38 @@
+ul.navigation {
+    margin: 0;
+    padding: 6px;
+    text-align: center
+}
+
+ul.navigation li {
+    display: inline-block;
+    padding: 3px;
+    font-weight: normal;
+   
+}
+
+ul.navigation li a, .disable {
+    display: inline-block;
+    min-width: 18px;
+    padding: 2px 5px 3px 5px;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: normal;
+    text-align: center;
+    border-radius: 1px;
+}
+
+ul.navigation li a {
+    color: #ffffff;
+    background: #fd7f84;
+}
+
+.disable {
+    color: #222222;
+    background: #cccccc;  
+}
+
+ul.navigation li a:hover {
+    color: #EB474E;
+    text-decoration: none
+}
