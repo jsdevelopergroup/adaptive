@@ -77,11 +77,11 @@
 
     color:white;
 
-    background-color: #f06e05;
+    background-color: #094897;
 
     border-radius: 2px;
 
-    font-size:16px;
+    font-size:18px;
 
     font-weight: normal;
 
@@ -89,12 +89,16 @@
 
     margin: 15px auto;
 
-    width:100px;
+    width:150px;
 
     text-align: center;
 
     display: none;
 
+}
+
+.load_more span {
+    float:right;
 }
 
 .item_id {

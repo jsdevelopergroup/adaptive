@@ -1,23 +1,10 @@
-   addEventListener('load', function() {
-
-
-
-    getDataProduct();
-
-
+  addEventListener('load', function() {
+     getDataProduct();
   }, false);
-
+  
   addEventListener('click', function() {
-    optionLineClick();
+     optionLineClick();
   }, false);
-
-  var inputPrice = document.querySelector('.input-price');
-
-  inputPrice.addEventListener("DOMSubtreeModified", function() {
-
-
-
-  });
 
   function roundPlus(x, n) {
      var m = Math.pow(10, n);
@@ -78,11 +65,9 @@
 
     for(var i = 0; i < optionLine.length; i++) {
         
-       (function(i) {
-
-        optionLine[i].onclick = function() {
+       (function(i) {optionLine[i].onclick = function() {
+        
           var currentBlock = this.parentNode.querySelectorAll('.option-line');
-
           for(var j = 0; j < currentBlock.length; j++) {
               currentBlock[j].childNodes[1].style.fontWeight = 'normal';
               currentBlock[j].childNodes[2].style.fontWeight = 'normal';
@@ -138,7 +123,7 @@
     var cartBlock = document.querySelector('.cart-block');
     var prorertyLine = cartBlock.querySelectorAll('.prorerty-line');
     var optionBlock = cartBlock.querySelectorAll('.option-block');
-    var paddTop = 46;
+    var paddTop = 39;
     
     if(flagDefaults == false){
        optionBlock[0].childNodes[0].childNodes[0].childNodes[0].checked = true;
@@ -156,7 +141,7 @@
           var styleTop = ((i + 1) * paddTop);
           optionBlock[i].style.top = styleTop + 'px';
           optionBlock[i].style.display = (optionBlock[i].style.display == 'block') ? 'none' : 'block';
-          prorertyLine[i].childNodes[2].innerHTML = (optionBlock[i].style.display == 'block') ? '&#9650;' : '&#9660;';
+          prorertyLine[i].childNodes[2].childNodes[0].innerHTML = (optionBlock[i].style.display == 'block') ? '&#9650;' : '&#9660;';
         }
       })(i);
     }
@@ -200,10 +185,8 @@
     
     priceOptionLine.innerHTML = (listJsonData[j].price != null) ? '$'+listJsonData[j].price : '';
     
-  //  priceOptionLine.setAttribute("line-price", "price-line");
-    
+    // priceOptionLine.setAttribute("line-price", "price-line");
     optionLine.appendChild(priceOptionLine);
-
     priceOptionLine.style.fontWeight = (listJsonData[j].bydef == 1) ? 'bold' : 'normal';
     valueOptionLine.style.fontWeight = (listJsonData[j].bydef == 1) ? 'bold' : 'normal';
 
@@ -228,11 +211,8 @@
       if(xhr.readyState == 4) {
         if((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
 
-        //  console.log(xhr.responseText)
-
+          //console.log(xhr.responseText);
           var listJson = JSON.parse(xhr.responseText);
-          var paddTop = 46;
-
           var cartBlock = document.querySelector('.cart-block');
           var prorertyLine = cartBlock.querySelectorAll('.prorerty-line');
           var optionBlock = cartBlock.querySelectorAll('.option-block');
@@ -272,9 +252,13 @@
             // #4 ����������� ������� ����
             var prorertyIcon = document.createElement('div');
             prorertyIcon.setAttribute("class", "prorerty-icon");
-            prorertyIcon.innerHTML = '&#9660;';
-            // ���������� ������� � �����
+            
+            var prorertyIconSub = document.createElement('div');
+            prorertyIconSub.setAttribute("class", "prorerty-icon-sub");
+            prorertyIconSub.innerHTML = '&#9660;';
+        
             prorertyLine.appendChild(prorertyIcon);
+            prorertyIcon.appendChild(prorertyIconSub);
 
             if (listJson[i].options.length > 0) {
               // ������������� ����(� ������, �������) �� ����������
@@ -283,14 +267,14 @@
               cartBlock.appendChild(prorertyBlock);
               
               for(var j = 0; j < listJson[i].options.length; j++) {
-                  showDataSubBlock(listJson[i].options, j, i, prorertyBlock, listJson[i].title, currentQty);
-                  if(i == 0 && flagDefaults == false){
-                     if(listJson[0].options[j].bydef == 1){
+                   showDataSubBlock(listJson[i].options, j, i, prorertyBlock, listJson[i].title, currentQty);
+                   if(i == 0 && flagDefaults == false){
+                      if(listJson[0].options[j].bydef == 1){
                         flagDefaults = true;
-                     }
-                  }
-               }
-            }
+                      }
+                   }
+                }
+             }
           }
           propertyLineClick(flagDefaults);
         } else {
@@ -327,27 +311,39 @@
 
     var imageHeight = document.querySelector('.image-height').innerHTML;
     var imageWidth = document.querySelector('.image-width').innerHTML;
-
-    for (var i = 0; i < itemProduct.length; i++) {
-      if (product) {
-        var dataHash = itemProduct[i].getAttribute('data-hash');
-        var dataId = itemProduct[i].getAttribute('data-id');
-        if (dataHash == product) {
-          setSpan(product, dataId);
-          showDataCart(product, imageWidth, imageHeight);
-          flagHash = true;
-        }
+ 
+    for(var i = 0; i < itemProduct.length; i++) {
+      if(product) {
+         var dataHash = itemProduct[i].getAttribute('data-hash');
+         var dataId = itemProduct[i].getAttribute('data-id');
+         if(dataHash == product) {
+            setSpan(product, dataId);
+            showDataCart(product, imageWidth, imageHeight);
+            flagHash = true;
+         }
       }
+      
       itemProduct[i].onclick = function() {
-        var dataHash = this.getAttribute('data-hash');
-        var dataId = this.getAttribute('data-id');
-        setSpan(dataHash, dataId);
-        window.location.hash = dataHash;
-        window.scrollTo(0, 146);
-        showDataCart(dataId, imageWidth, imageHeight);
+        
+         for(var j = 0; j < itemProduct.length; j++){
+             itemProduct[j].style.backgroundColor = '#EDCCB8';
+             itemProduct[j].style.color = '#333333';
+         }        
+         
+         this.style.backgroundColor = '#d86f41';
+         this.style.color = '#ffffff';
+        
+         var dataHash = this.getAttribute('data-hash');
+         var dataId = this.getAttribute('data-id');
+         setSpan(dataHash, dataId);
+         window.location.hash = dataHash;
+         showDataCart(dataId, imageWidth, imageHeight);
+         
       }
     }
-    if (flagHash == false) {
-      window.location = location.href.replace(location.hash, "");
+    
+    if(flagHash == false) {
+       window.location = location.href.replace(location.hash, "");
     }
+    
   }

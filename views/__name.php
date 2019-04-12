@@ -20,7 +20,7 @@
 </li>
 
 <li itemscope itemtype="http://schema.org/ListItem" itemprop="itemListElement" class="breadcrumb_name">
- <span itemprop="name"><?=$name->objectName?> posters and prints</span>
+ <span itemprop="name"><?=$name->celebrityName?> posters and prints</span>
  <meta itemprop="position" content="3" />
 </li>
 
@@ -29,17 +29,19 @@
 <!-- END Breadcrumb -->
 
 <!-- Sorting -->
+
+<?if($name->allItems > 1):?>
 <div class="sort">
 <div class="sort_block">
 <span class="sort_span">Sort by:&nbsp;</span>
 <select class="sort_select" onchange="top.location.href=this.options[this.selectedIndex].value;">
 <?foreach($name->arraySorting as $value):?>
 <?if($value['value'] == 'new'):?>
-  <option value="<?=SITE_NAME?>/<?=$name->fullUrlName?>/"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
+  <option value="<?=SITE_NAME?>/<?=$name->celebrityFullUrlName?>/"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
      <?=$value['name']?> (<?=$value['count']?>)
   </option>
 <?else:?>
-  <option value="<?=SITE_NAME?>/<?=$name->fullUrlName?>/?sortby=<?=$value['value']?>"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
+  <option value="<?=SITE_NAME?>/<?=$name->celebrityFullUrlName?>/?sortby=<?=$value['value']?>"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
      <?=$value['name']?> (<?=$value['count']?>)
   </option>
 <?endif;?>
@@ -47,6 +49,8 @@
 </select>
 </div>
 </div>
+<?endif;?>
+
 <!-- END Sorting -->
 </div>
 </div>
@@ -55,19 +59,19 @@
 <!-- Main block -->
 <div class="box_posters">
 <!-- Title H1 -->
-<h1><?=$name->titlePage?></h1>
+<h1><?=$name->celebrityH1?></h1>
 <!-- END Title H1 -->
-<?if($name->seoText):?>
+<?if($name->celebrityText):?>
 <!-- Text -->
 <div class="text_style noselect <?=$dis_style?>">
-<?=$name->seoText?>
+<?=$name->celebrityText?>
 </div>
 <br />
 <!-- END Text -->
 <?endif;?>
 
-<div id="object_parent" style="display: none;"><?=$name->objectParent?></div>
-<div id="url_name" style="display: none;"><?=$name->objectName_delim?></div>
+<div id="object_parent" style="display: none;"><?=$name->celebrityParent?></div>
+<div id="url_name" style="display: none;"><?=$name->celebrityNameDelim?></div>
 <div id="total_items" style="display: none;"><?=$name->totalItems?></div>
 <div id="sort_by" style="display: none;"><?=$_SESSION['sort']?></div>
 <div id="site-name" style="display: none;"><?=SITE_NAME?></div>

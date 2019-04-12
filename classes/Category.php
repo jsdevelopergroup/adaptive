@@ -1,4 +1,164 @@
 <?
+class Category extends Mysql{
+    
+    public $categoryId;
+    public $categoryUrl;
+    public $categoryName;
+    public $categoryCounts;
+    public $categoryH1;
+    public $categoryBreadName;
+    public $categoryText;
+    
+    public $metaArray = array();
+    public $arraySorting = array();
+    public $categoryNames = array();
+    
+    public $end;
+    public $page;
+    public $sortby;
+    public $count;
+    
+    public $sortVar = '?';
+    public $perPage = 24;
+    public $img404 = '/icons/image404.gif';
+    
+    public $typePage;
+        
+    public function __construct(){
+        
+        $categoryGet = mysql_real_escape_string($_GET["category"]).'-posters';
+        $categoryRecord = $this->getOneRow("SELECT * FROM __category WHERE category_url = '$categoryGet' AND category_active=1");
+      
+        // _SERVER["REQUEST_SCHEME"] : http
+        // _SERVER["SERVER_NAME"]    : adaptive.idposter.loc
+        // _SERVER["HTTP_HOST"]      : adaptive.idposter.loc
+        // _SERVER["REDIRECT_URL"]   : /celebrity-posters/  
+        
+        if(count($categoryRecord) > 1):
+        
+           if($_GET['page'] == 1 AND $_GET['sortby'] != ''):
+              $str_redirect = $_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"].'?sortby='.$_GET['sortby'];
+              header("HTTP/1.1 301 Moved Permanently");
+              header("Location: ".$str_redirect."");
+           endif;
+           
+           if($_GET['page'] > 0 AND $_GET['sortby'] == ''):
+              $str_redirect = $_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].$_SERVER["REDIRECT_URL"];
+              header("HTTP/1.1 301 Moved Permanently");
+              header("Location: ".$str_redirect."");
+           endif;          
+           
+           $this->categoryId = $categoryRecord['category_id'];
+           $this->categoryUrl = $categoryRecord['category_url'].'/';
+           $this->categoryName = $categoryRecord['category_name'];
+           $this->categoryCounts = $categoryRecord['category_counts'];
+
+           $this->page = (isset($_GET["page"])) ? (int)$_GET["page"] : 1;
+           $start = ($this->page == 1) ? 0 : ($this->page - 1) * $this->perPage;
+           
+           if($categoryGet == 'new-posters'):
+              $count_sql = "SELECT COUNT(*) as count FROM __celebrity WHERE celebrity_active=1";       
+           else:
+              $count_sql = "SELECT COUNT(*) as count FROM __celebrity WHERE celebrity_category_id = $this->categoryId AND celebrity_active=1";
+           endif;
+           
+           $this->count = $this->getRowValue($count_sql,"count");
+           $this->end = ceil($this->count / $this->perPage);  
+           
+           $this->categoryH1 = $categoryRecord['category_h1'].' : '.$this->count.' '.$this->categoryCounts;
+           $this->categoryBreadName = $this->categoryName.' posters and prints';
+           
+           if(isset($_GET["sortby"])):
+              $_SESSION['sort'] = $_GET["sortby"];
+              if($_SESSION['sort'] == 'new') $_SESSION['sortid'] = 'ORDER BY celebrity_id DESC';
+              if($_SESSION['sort'] == 'old') $_SESSION['sortid'] = 'ORDER BY celebrity_id ASC';
+              if($_SESSION['sort'] == 'a_z') $_SESSION['sortid'] = 'ORDER BY celebrity_name ASC';
+              if($_SESSION['sort'] == 'z_a') $_SESSION['sortid'] = 'ORDER BY celebrity_name DESC';
+              if($_SESSION['sort'] == 'popular') $_SESSION['sortid'] = 'ORDER BY celebrity_view DESC';
+              $canonical = SITE_NAME.'/'.$this->categoryUrl.'/';
+              $tail = '; sorting: '.str_replace('_','-',$_GET["sortby"]);
+              if(isset($page)):
+                 $tail .= '; page: '.$page. '';
+              endif;
+              $this->sortby = mysql_real_escape_string($_GET["sortby"]);
+           else:
+              $_SESSION['sort'] = 'new';
+              $_SESSION['sortid'] = 'ORDER BY celebrity_id DESC';
+              $this->sortby = $_SESSION['sort'];
+              $this->seoText = $categoryRecord['category_text'];
+              $canonical = NULL;
+           endif;
+
+           if($categoryGet == 'new-posters'):
+              $mainSql = "SELECT celebrity_name,celebrity_parent as parent, 
+                         (SELECT picture_big FROM __picture WHERE picture_parent = parent ORDER BY picture_view DESC LIMIT 1) as picture_big, 
+                         (SELECT picture_dir_big FROM __picture WHERE picture_parent = parent ORDER BY picture_view DESC LIMIT 1) as picture_big_dir 
+                         FROM __celebrity 
+                         WHERE celebrity_active=1 ".$_SESSION['sortid']." LIMIT $start, $this->perPage";
+           else:
+              $mainSql = "SELECT celebrity_name,celebrity_parent as parent, 
+                         (SELECT picture_big FROM __picture WHERE picture_parent = parent ORDER BY picture_view DESC LIMIT 1) as picture_big, 
+                         (SELECT picture_dir_big FROM __picture WHERE picture_parent = parent ORDER BY picture_view DESC LIMIT 1) as picture_big_dir 
+                         FROM __celebrity 
+                         WHERE celebrity_category_id = $this->categoryId 
+                         AND celebrity_active=1 ".$_SESSION['sortid']." LIMIT $start, $this->perPage";
+           endif;
+           
+         //  echo $mainSql;
+           
+           $currentArray = $this->getArray($mainSql);
+           
+           $c = 0;
+           foreach($currentArray as $item):
+              $imgPath = './img/bigs/'.$item['picture_dir_big'].'/'.$item['picture_big'];
+              $this->categoryNames[$c]['img_src'] = (file_exists($imgPath)) ? SITE_NAME.'/'.$imgPath : $this->img404;
+              $this->categoryNames[$c]['a_link'] = SITE_NAME.'/'.str_replace(' ','_',$item['celebrity_name']).'/';
+              $this->categoryNames[$c]['a_title'] = $item['celebrity_name'].' posters and prints';
+              $this->categoryNames[$c]['a_alt'] = $item['celebrity_name'].' posters and prints';
+              $this->categoryNames[$c]['span_title'] = '<b>'.$item['celebrity_name'].'</b><br /> posters and prints';
+              $c++;
+           endforeach;
+           
+           if(count($this->categoryNames) > 0):          
+           
+              $this->arraySorting[] = array('name'=>'NEW','value'=>'new');
+              $this->arraySorting[] = array('name'=>'OLD','value'=>'old');
+              $this->arraySorting[] = array('name'=>'A-Z','value'=>'a_z');
+              $this->arraySorting[] = array('name'=>'Z-A','value'=>'z_a');
+              $this->arraySorting[] = array('name'=>'POPULAR','value'=>'popular');
+              
+              $this->metaArray[] = $categoryRecord['category_title'];
+              $this->metaArray[] = $categoryRecord['category_description'];
+              $this->metaArray[] = $categoryRecord['category_name'].' posters, prints';
+
+              if($categoryGet == 'new-posters'):
+                 $celebrity_parent = $this->getRowValue("SELECT celebrity_parent FROM __celebrity WHERE celebrity_active = 1 ORDER BY celebrity_id DESC LIMIT 1","celebrity_parent");          
+              else:
+                 $celebrity_parent = $this->getRowValue("SELECT celebrity_parent FROM __celebrity WHERE celebrity_category_id = $this->categoryId AND celebrity_active = 1 ORDER BY celebrity_id DESC LIMIT 1","celebrity_parent");          
+              endif;
+              
+              $pictureRecord = $this->getOneRow("SELECT picture_big,picture_dir_big FROM __picture WHERE picture_parent = $celebrity_parent AND picture_active = 1 ORDER BY picture_view DESC LIMIT 1");        
+           
+              $this->metaArray[] = SITE_NAME.'/img/bigs/'.$pictureRecord['picture_dir_big'].'/'.$pictureRecord['picture_big'];
+              $this->metaArray[] = SITE_NAME.$_SERVER['REQUEST_URI'];
+              $this->metaArray[] = 'index, follow';
+      
+              if($canonical):
+                 $this->metaArray[] = $canonical;
+              endif;
+              
+              $this->typePage = 'category';
+        
+           else:
+              $this->typePage = '404';
+           endif;
+
+        else:
+           $this->typePage = '404';
+        endif;
+    }
+}
+
 
 /*
         case 'movie-posters':
@@ -52,127 +212,3 @@
         break;
 */        
 
-class Category extends Mysql{
-    
-    public $typePage;
-
-    public $nameCounts;
-    public $categoryId;
-    public $categoryUrl;
-    public $categoryName;
-    public $perPage = 24;
-    
-    public $titlePage;
-    public $arraySorting = array();
-    
-    public $metaArray = array();
-    public $categoryNames = array();
-    public $seoText;
-    
-    public $end;
-    public $page;
-    public $sortby;
-    public $count;
-    
-    public $img404 = '/icons/image404.gif';
-        
-    public function __construct(){
-        
-        $categoryGet = mysql_real_escape_string($_GET["category"]).'-posters';
-        
-        echo $categoryGet; 
-        
-        $categoryRow = $this->getOneRow("SELECT * FROM __category WHERE url = '$categoryGet'");
-        
-        if(count($categoryRow) > 1):
-        
-           $this->nameCounts = $categoryRow['name_counts'];
-           $this->categoryId = $categoryRow['id'];
-           $this->categoryUrl = $categoryRow['url'];
-           
-           $this->categoryName = $categoryRow['name'];
-
-           $this->page = (isset($_GET["page"])) ? (int)$_GET["page"] : 1;
-           $start = ($this->page == 1) ? 0 : ($this->page - 1) * $this->perPage;
-           
-           $count_sql = "SELECT COUNT(*) as count FROM __celebrity WHERE c_id = $this->categoryId AND active=1";
-           $this->count = $this->getRowValue($count_sql,"count");
-           $this->end = ceil($this->count / $this->perPage);
-           
-           $this->titlePage = $categoryRow['title_page'].' : '.$this->count.' '.$this->nameCounts;
-           
-           if(isset($_GET["sortby"])){
-                 $_SESSION['sort'] = $_GET["sortby"];
-                 if($_SESSION['sort'] == 'new') $_SESSION['sortid'] = 'ORDER BY id DESC';
-                 if($_SESSION['sort'] == 'old') $_SESSION['sortid'] = 'ORDER BY id ASC';
-                 if($_SESSION['sort'] == 'a_z') $_SESSION['sortid'] = 'ORDER BY object_name ASC';
-                 if($_SESSION['sort'] == 'z_a') $_SESSION['sortid'] = 'ORDER BY object_name DESC';
-                 if($_SESSION['sort'] == 'popular') $_SESSION['sortid'] = 'ORDER BY views DESC';
-                 $canonical = SITE_NAME.'/'.$this->categoryUrl.'/';
-                 $tail = '; sorting: '.str_replace('_','-',$_GET["sortby"]);
-                 if(isset($page)):
-                    $tail .= '; page: '.$page. '';
-                 endif;
-                 $this->sortby = mysql_real_escape_string($_GET["sortby"]);
-           }else{
-                 $_SESSION['sort'] = 'new';
-                 $_SESSION['sortid'] = 'ORDER BY id DESC';
-                 $this->sortby = $_SESSION['sort'];
-                 $this->seoText = $categoryRow['seo_text'];
-                 $canonical = NULL;
-           }
-           
-           $mainSql = "SELECT object_name,object_parent as parent, (SELECT object_picture_banner FROM __picture WHERE object_parent = parent ORDER BY object_view DESC LIMIT 1) as object_image, (SELECT folder FROM __picture WHERE object_parent = parent ORDER BY object_view DESC LIMIT 1) as object_folder FROM __celebrity WHERE c_id = $this->categoryId AND active=1 ".$_SESSION['sortid']." LIMIT $start, $this->perPage";
-           $currentArray = $this->getArray($mainSql);
-           
-           $c = 0;
-           foreach($currentArray as $item):
-               
-              $imgPath = './img/bigs/'.$item['object_folder'].'/'.$item['object_image'];
-              
-              $this->categoryNames[$c]['img_src'] = (file_exists($imgPath)) ? SITE_NAME.'/'.$imgPath : $this->img404;
-              $this->categoryNames[$c]['a_link'] = SITE_NAME.'/'.str_replace(' ','_',$item['object_name']).'/';
-              $this->categoryNames[$c]['a_title'] = $item['object_name'].' posters and prints';
-              $this->categoryNames[$c]['a_alt'] = $item['object_name'].' posters and prints';
-              $this->categoryNames[$c]['span_title'] = '<b>'.$item['object_name'].'</b><br /> posters and prints';
-              $c++;
-           
-           endforeach;
-           
-          // print_r($this->categoryNames);
-           
-           if(count($this->categoryNames) > 0):          
-           
-              $this->arraySorting[] = array('name'=>'NEW','value'=>'new');
-              $this->arraySorting[] = array('name'=>'OLD','value'=>'old');
-              $this->arraySorting[] = array('name'=>'A-Z','value'=>'a_z');
-              $this->arraySorting[] = array('name'=>'Z-A','value'=>'z_a');
-              $this->arraySorting[] = array('name'=>'POPULAR','value'=>'popular');
-              
-              $this->metaArray[] = $categoryRow['title'];
-              $this->metaArray[] = $categoryRow['description'];
-              $this->metaArray[] = $categoryRow['name'].' posters, prints';
-
-              $object_parent = $this->getRowValue("SELECT object_parent FROM __celebrity WHERE c_id = $this->categoryId AND active = 1 ORDER BY id DESC LIMIT 1","object_parent");          
-              $object_picture = $this->getOneRow("SELECT object_picture_banner,folder FROM __picture WHERE object_parent = $object_parent AND object_active = 1 ORDER BY object_view DESC LIMIT 1");        
-           
-              $this->metaArray[] = SITE_NAME.'/img/bigs/'.$object_picture['folder'].'/'.$object_picture['object_picture_banner'];
-              $this->metaArray[] = SITE_NAME.$_SERVER['REQUEST_URI'];
-              $this->metaArray[] = 'index, follow';
-      
-              if($canonical):
-                 $this->metaArray[] = $canonical;
-              endif;
-              
-              $this->typePage = 'category';
-        
-           else:
-              $this->typePage = '404';
-           endif;
-
-        else:
-           $this->typePage = '404';
-        endif;
-        
-    }
-}

@@ -14,10 +14,10 @@
           </a>
         </li>
         <li itemscope itemtype="http://schema.org/ListItem" itemprop="itemListElement">
-          <span itemprop="name"><?=$category->categoryName?> posters and prints</span>
+          <span itemprop="name"><?=$category->categoryBreadName?></span>
           <meta itemprop="position" content="2" />
         </li>
-      </ol>
+      </ol> 
     </div>
     <!-- END Breadcrumb -->
 
@@ -29,11 +29,11 @@
         <select class="sort_select" onchange="top.location.href=this.options[this.selectedIndex].value;">
         <?foreach($category->arraySorting as $value):?>
           <?if($value['value'] == 'new'):?>
-          <option value="<?=SITE_NAME?>/<?=$category->categoryUrl?>/"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
+          <option value="<?=SITE_NAME?>/<?=$category->categoryUrl?>"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
             <?=$value['name']?>
           </option>
           <?else:?>
-          <option value="<?=SITE_NAME?>/<?=$category->categoryUrl?>/?sortby=<?=$value['value']?>"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
+          <option value="<?=SITE_NAME?>/<?=$category->categoryUrl?><?=$category->sortVar?>sortby=<?=$value['value']?>"<?if($_SESSION['sort']==$value['value']){?> selected<?}?>>
             <?=$value['name']?>
           </option>
           <?endif;?>
@@ -47,7 +47,7 @@
 
 
 <div class="box_posters">
-<h1><?=$category->titlePage?></h1>
+<h1><?=$category->categoryH1?></h1>
  <div class="box_posters__list clearfix">
    <?foreach($category->categoryNames as $item):?>
    <div class="block_names">
@@ -69,6 +69,6 @@
   </div>
  <?=$navi->navigation?>
  <div class="article">
-   <?=$category->seoText?>
+   <?=$category->categoryText?>
  </div>
 </div>

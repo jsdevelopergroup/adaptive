@@ -1,6 +1,6 @@
 .block_names {
     float: left;
-    height: 400px;
+    height: 430px;
     margin: 4px;
     max-width: 250px;
     width:250px;
@@ -18,6 +18,11 @@
     font-size: 16px;
     color:#333;
 }
+
+.block_names__title span.title_name span{
+    color:red;
+}
+
 .block_names__title a {
     color:#222;
     text-decoration: none;

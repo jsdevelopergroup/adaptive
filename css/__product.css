@@ -1,7 +1,5 @@
 h1 span, h2 span {
-
     color: #ff7901;
-
 }
 
 /* START CART */
@@ -71,67 +69,52 @@ h1 span, h2 span {
 }
 
 .image-big {
-
     box-shadow: 5px 5px 8px -3px rgba(0,0,0,.8);
-
 }
 
 .current_url, .referer_url, .image-height, .image-width {
-
     display: none;
-
 }
 
 .prorerty-line {
-
     display: block;
-
     border-bottom: 1px solid #bbbaba;
-
     width:100%;
-
     cursor: pointer;
-
+    height: 40px;
 }
 
 .prorerty-title, .prorerty-bydef, .prorerty-icon {
-
     display: inline-block;
-
-    padding: 14px;
-
+    padding: 8px;
+    
     background-color: #fbf6f1;
-
 }
 
 .prorerty-title {
-
-    width: 140px;
-
+    width: 90px;
     color:#222;
-
-    font-size: 16px;
-
+    font-style: italic;
+    font-size: 14px;
 }
 
 .prorerty-bydef {
 
-    width: 100px;
+    width: 174px;
 
     color:#fb8303;
-
-    font-size: 16px;
-
+    
+    font-weight: bold;
+    font-size: 14px;
 }
 
 .prorerty-icon {
 
     width: 10px;
-
+    
+ 
+    
     color:#b3b2b1;
-
-    font-size:16px;
-
 }
 
 .option-block {
@@ -148,7 +131,7 @@ h1 span, h2 span {
 
     border-right: 1px solid transparent;
 
-    width:266px;
+    width:280px;
 
     box-shadow: 0 0 5px #333;
 
@@ -192,7 +175,7 @@ h1 span, h2 span {
 
 .value-line {
 
-    width:110px;
+    width:160px;
 
 }
 

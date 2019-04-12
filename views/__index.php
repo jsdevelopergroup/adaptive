@@ -144,9 +144,9 @@
 
            <div class="inp_block">
 
-             <input type="text" id="search-text" class="search-text" maxlength="50" value=""/>
+             <input type="text" class="search-text" maxlength="50" value=""/>
 
-             <div id="suggesstion-box"></div>
+             <div class="suggesstion-box"></div>
 
            </div>
 
@@ -216,9 +216,9 @@
 
        $end = ($n == 12) ? 'endline' : '';?>
 
-       <li><a href="<?=SITE_NAME?><?=$item['url']?>" class="<?=$end?>"><?=$item['name']?> <?=$item['title']?></a></li>
+       <li><a href="<?=SITE_NAME?>/<?=$item['category_url']?>/" class="<?=$end?>" title="<?=$item['category_h1']?>"><?=$item['category_name']?> <?=$item['category_tail']?></a></li>
 
-       <?if($item['id']=='4'):?>
+       <?if($item['category_rating']=='4'):?>
 
          <li><a href="#" title="Other posters" class="disactive">Other posters</a>
 
@@ -226,7 +226,7 @@
 
           <?endif;?>
 
-          <?if($item['id']=='8'):?>
+          <?if($item['category_rating']=='8'):?>
 
             </ul>
 
@@ -250,6 +250,10 @@
 
  </div>
 
+ <div id="updown">
+ <div class="updown-icon"></div>
+ <div class="updown-data"></div>
+ </div>
  
 
  <div class="footer">
@@ -258,15 +262,9 @@
 
    <ul class="links">
 
-    <?foreach($index->bottomMenu as $item):
+    <?foreach($index->bottomMenu as $item):?>
 
-     if($item['site']==1):
-
-        $item['value']=SITE_NAME.'/'.$item['value'];
-
-     endif;?>
-
-     <li><a href="<?=$item['value']?>" <?=$item['ads']?>><?=$item['name']?></a></li>
+     <li><a href="/<?=$item['category_url']?>/"><?=$item['category_name']?></a></li>
 
     <?endforeach;?>
 

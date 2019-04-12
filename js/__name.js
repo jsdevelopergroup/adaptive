@@ -1,62 +1,39 @@
 function creationBlock(data, products, url_name, name_name, type_load) {
-    
   var name_ = name_name.replace(" ", "_");
-  
-
   $.each(data, function(index, data) {
-    
     var div_block = '<div class="block_names">';
     var opac;
-    
-    div_block += '<span class="item_id"># ' + data.object_id + ' </span>';
+    div_block += '<span class="item_id"># ' + data.picture_id + ' </span>';
     div_block += '<div class="block_names__inner">';
     div_block += '<div class="block_names__image">';
-    
     if(data.object_adult == 1) {
        div_block += '<div class="nature">';
        div_block += '<span class="nature_text">Probability mature content</span>';
        div_block += '</div>';
        var opac = 'style="opacity:0.3"';
     }
-    
-    div_block += '<a href="' + url_name + '/' + data.object_id + '_' + name_ + '_poster.html">';
+    div_block += '<a href="' + url_name + '/' + data.picture_id + '_' + name_ + '_poster.html">';
     //  div_block += data.object_url;
-    div_block += '<img src="' + data.object_url + '"';
-    div_block += 'alt="' + name_name + ' picture ' + data.object_banner + '"';
-    div_block += 'title="' + name_name + ' poster #' + data.object_id + '"';
+    div_block += '<img src="' + data.picture_path + '"';
+    div_block += 'alt="' + name_name + ' picture ' + data.picture_big + '"';
+    div_block += 'title="' + name_name + ' poster #' + data.picture_id + '"';
     div_block += 'border="0"';
     div_block += 'id=""';
     div_block += 'class="img-shadow" ' + opac + '></a></div>';
     div_block += '<div class="prodlinks_block">';
-    
     $.each(products, function(index, products) {
       // foreach
       div_block += '<div class="prlist_block">';
       div_block += '<a class="prlist_link"';
-      div_block += 'href="' + url_name + '/' + data.object_id + '_' + name_ + '_' + products.url_product + '.html"';
-      div_block += 'title="' + name_name + ' ' + products.product + ' #' + data.object_id + '">';
+      div_block += 'href="' + url_name + '/' + data.picture_id + '_' + name_ + '_' + products.url_product + '.html"';
+      div_block += 'title="' + name_name + ' ' + products.product + ' #' + data.picture_id + '">';
       div_block += '<span class="prlist_link__title">' + products.product + '</span>';
       div_block += '</a></div>';
       // endforeach
     });
-     
     div_block += '</div></div>';
-    
     $('.posters_list').append(div_block);
-    
-    /*
-    if (type_load == 'scrolling') {
-      setTimeout(function() {
-        $('.posters_list').append(div_block);
-      }, 500);
-    } else {
-      $('.posters_list').append(div_block);
-    }
-    $('.load_content').css({'display':'none'});
-    */
   });
-  
- // return block.html();
 }
 
 function creationOfBlocks(start_loader, end_loader, object_parent, sort_by, url_name, name_name, type_load, products, mobile) {
@@ -86,22 +63,29 @@ function creationOfBlocks(start_loader, end_loader, object_parent, sort_by, url_
       'display': 'block'
     });
     
-    //console.log(data);
-    
-    //data = jQuery.parseJSON(data);
     if (data.length > 0) {
       products = jQuery.parseJSON(products);
       if (products.length > 0) {
         $('.load_content').css({
           'display': 'none'
         });
+        
         creationBlock(data, products, url_name, name_name, type_load);
         var totalItems = $('#total_items').text();
+        var totalSpan = $('.load_more span').text();
+        
         if (totalItems > 24) {
-          $('.load_more').css({
-            'display': 'block'
-          });
-          $('.load_more span').text(totalItems - 24);
+          $('.load_more').css({'display': 'block'});
+        if(totalSpan == ''){
+           totalItems = totalItems - 24; 
+        }else{
+           totalItems = totalSpan - 24; 
+        }  
+          if(totalItems < 0){
+             $('.load_more').css({'display': 'none'});
+          }else{
+             $('.load_more span').text(totalItems);
+          }
         }
       }
     } else {
@@ -113,10 +97,7 @@ function creationOfBlocks(start_loader, end_loader, object_parent, sort_by, url_
 }
 
 $(document).ready(function() {
-    
   var projectUrl = $('#site-name').text()+'/';  
-  
-  
   var scrolling_load = false;
   var starting_load = false;
   var object_parent = $('#object_parent').text();

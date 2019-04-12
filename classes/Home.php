@@ -2,12 +2,10 @@
 
 class Home extends Mysql {
     
-    public $seoText;
+    public $categoryText;
+    public $categoryH1;
     public $homeProducts = array();
-    
-    
     public $metaArray = array();
-    
     public $img404 = '/icons/image404.gif';
    
     /* 
@@ -28,30 +26,33 @@ class Home extends Mysql {
     function __construct() {
         
          
-         $thisHomeProducts = $this->getArray("SELECT * FROM __product_home WHERE object_act = 1 ORDER BY object_category ASC");
-         $this->seoText = $this->getRowValue("SELECT seo_text FROM __category WHERE url = '/' AND active = '1'","seo_text");
+        
+         $homeRecord = $this->getOneRow("SELECT category_h1,category_text,category_title,category_description FROM __category WHERE category_url = '/' AND category_active=1");
          
-         $this->metaArray[] = 'Posters, Prints, best choice of celebrities at online print store idPoster.com';
-         $this->metaArray[] = 'Over 780.000 unique Posters & Prints. Celebrity posters, photos, prints on mugs, pillows, iPhone cases, magnets, puzzles, mousepads, T-shirts, etc. at idPoster.com';
+         $this->categoryText = $homeRecord['category_text'];
+         $this->categoryH1 = $homeRecord['category_h1'];
+         $this->metaArray[] = $homeRecord['category_title'];
+         $this->metaArray[] = $homeRecord['category_description'];
+         
          $this->metaArray[] = "Posters, Photos, Prints, Mousepads, T-Shirts, Magnets, Puzzles, Pillows, Mugs, Cups, Calendars, Cases for iPhone, iPad, Samsung Galaxy";
         
          $this->metaArray[] = SITE_NAME.'/logo.png';
          $this->metaArray[] = SITE_NAME;
          $this->metaArray[] = 'index, follow';
          
+         $thisHomeProducts = $this->getArray("SELECT home_celebrity,home_picture_path,home_category_id FROM __home_celebrity WHERE home_active = 1 ORDER BY home_category_id ASC");
+         
          $n=0;
-          foreach($thisHomeProducts as $item):
-                  
-                 $this->homeProducts[$n]['img_src'] = (file_exists($item['object_path'])) ? SITE_NAME.'/'.$item['object_path'] : $this->img404;
-                 $this->homeProducts[$n]['name'] = $item['object_name'];
-                 $this->homeProducts[$n]['a_link'] = SITE_NAME.'/'.str_replace(' ','_',$item['object_name']).'/';
-                 $this->homeProducts[$n]['a_title'] = $item['object_name'].' posters and prints';
-                 $this->homeProducts[$n]['a_alt'] = $item['object_name'].' posters and prints';
-                 $this->homeProducts[$n]['object_category'] = $item['object_category'];
-                 $this->homeProducts[$n]['span_title'] = '<b>'.$item['object_name'].'</b><br /> posters and prints';
+         foreach($thisHomeProducts as $item):
+                 $this->homeProducts[$n]['home_picture_path'] = (file_exists($item['home_picture_path'])) ? SITE_NAME.'/'.$item['home_picture_path'] : $this->img404;
+                 $this->homeProducts[$n]['home_celebrity'] = $item['home_celebrity'];
+                 $this->homeProducts[$n]['link_href'] = SITE_NAME.'/'.str_replace(' ','_',$item['home_celebrity']).'/';
+                 $this->homeProducts[$n]['link_title'] = $item['home_celebrity'].' posters and prints';
+                 $this->homeProducts[$n]['link_alt'] = $item['home_celebrity'].' posters and prints';
+                 $this->homeProducts[$n]['home_category_id'] = $item['home_category_id'];
+                 $this->homeProducts[$n]['span_title'] = '<b>'.$item['home_celebrity'].'</b><br /> posters and prints';
                  $n++; 
-                  
-          endforeach;
+         endforeach;
      
       /*
       $celebrity_a = array();
@@ -106,8 +107,8 @@ class Home extends Mysql {
      */
     }
      
-    public function getCategoryName($id){
-        return $this->getRowValue("SELECT name FROM __category WHERE id = $id","name");
+    public function getCategoryName($category_id){
+        return $this->getRowValue("SELECT category_name FROM __category WHERE category_id = $category_id","category_name");
     }
     
 }

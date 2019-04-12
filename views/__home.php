@@ -50,7 +50,7 @@
 
 <div class="box_posters">
 
-<h1>Posters, photos | mousepads, t-shirts | magnets, puzzles | pillows, mugs | Calendar 2019 | Phone cases</h1>
+<h1><?=$home->categoryH1?></h1>
 
  <div class="box_posters__list clearfix">
 
@@ -64,7 +64,7 @@
 
    if($n == 0):
 
-      if($k != 13)echo '<h2>Popular <span>'.$home->getCategoryName($item['object_category']).'</span> Posters and Prints</h2>';
+      if($k != 13)echo '<h2>Popular <span>'.$home->getCategoryName($item['home_category_id']).'</span> Posters and Prints</h2>';
 
    endif;?>
 
@@ -72,23 +72,25 @@
 
         <div class="block_names__image">
 
-          <a href="<?=$item['a_link']?>">
+          <a href="<?=$item['link_href']?>">
 
-            <img src="<?=$item['img_src']?>"
+            <img src="<?=$item['home_picture_path']?>"
 
-               title="<?=$item['a_title']?>"
+               title="<?=$item['link_title']?>"
 
-                 alt="<?=$item['a_alt']?>"
+                 alt="<?=$item['link_alt']?>"
 
                class="img-shadow" />
 
           </a>
 
         </div>
+        
+
 
         <div class="block_names__title">
 
-          <a href="<?=$item['a_link']?>">
+          <a href="<?=$item['link_href']?>">
 
             <span class="title_name"><?=$item['span_title']?></span>
 
@@ -114,7 +116,7 @@
 
  </div>
 
-<div class="article"><?=$home->seoText?></div>
+<div class="article"><?=$home->categoryText?></div>
 
 <br />
 

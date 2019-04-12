@@ -35,31 +35,28 @@ class Product extends Mysql {
        // https://idposter.com/Nikita_Kucherov/919214_Nikita_Kucherov_poster.html
        // https://idposter.com/Nikita-Kucherov-posters-and-prints/Nikita-Kucherov-print-919214#poster
 
-       $id = (int)$_GET['id'];
-       $sql = 'SELECT object_id,folder,object_smalls,object_picture_banner,object_picture_icon,object_width,object_height FROM __picture WHERE object_active = 1 AND object_id = '.$id;
-       // 0.0004
-       // $sql = 'SELECT * FROM object WHERE object_id = '.$id;
-       // 0.0005
-       
+       $id = intval($_GET['id']);
+       $sql = 'SELECT picture_id,picture_small,picture_dir_small,picture_big,picture_dir_big,picture_width,picture_height FROM __picture WHERE picture_active = 1 AND picture_id = '.$id;
        
        $object = $this->getOneRow($sql);
        if(count($object) > 1):
 
-          $name = str_replace('-',' ',$_GET['name']);
-          $nameRecord = $this->getOneRow("SELECT object_name,c_id FROM __celebrity WHERE object_name = '$name' AND active = 1 LIMIT 1");
-          if(count($nameRecord) < 2) $nameRecord = $this->getOneRow("SELECT object_name,c_id FROM __celebrity WHERE object_dash = '$name' AND active = 1 LIMIT 1");
+          $name = str_replace('-',' ',mysql_real_escape_string($_GET['name']));
+          
+          $nameRecord = $this->getOneRow("SELECT celebrity_name,celebrity_category_id FROM __celebrity WHERE celebrity_name = '$name' AND celebrity_active = 1 LIMIT 1");
+          if(count($nameRecord) < 2) $nameRecord = $this->getOneRow("SELECT celebrity_name,celebrity_category_id FROM __celebrity WHERE celebrity_dash = '$name' AND celebrity_active = 1 LIMIT 1");
 
-          $categoryId = $nameRecord['c_id'];
-          $categoryRecord = $this->getOneRow("SELECT name,url FROM __category WHERE id = '$categoryId' LIMIT 1");
+          $categoryId = $nameRecord['celebrity_category_id'];
+          $categoryRecord = $this->getOneRow("SELECT category_name,category_url FROM __category WHERE category_id = '$categoryId' LIMIT 1");
 
-          $this->categoryUrl = $categoryRecord['url'];
-          $this->categoryName = $categoryRecord['name'];
-          $this->fullName = $nameRecord['object_name'];
+          $this->categoryUrl = $categoryRecord['category_url'];
+          $this->categoryName = $categoryRecord['category_name'];
+          $this->fullName = $nameRecord['celebrity_name'];
 
-          $this->imgSrcBg = '/img/bigs/'.$object['folder'].'/'.$object['object_picture_banner'];
-          $this->imgSrcSm = '/img/smalls/'.$object['object_smalls'].'/'.$object['object_picture_icon'];
+          $this->imgSrcBg = '/img/bigs/'.$object['picture_dir_big'].'/'.$object['picture_big'];
+          $this->imgSrcSm = '/img/smalls/'.$object['picture_dir_small'].'/'.$object['picture_small'];
 
-          $this->imageName = $object['object_picture_banner'];
+          $this->imageName = $object['picture_big'];
 
           if(!file_exists('.'.$this->imgSrcBg)):
              $this->imgSrcBg = '/icons/image404big.jpg';
@@ -76,35 +73,35 @@ class Product extends Mysql {
 
           // gorizontal
           if($this->imgWSm > $this->imgHSm):
-             if($object['object_width'] > $object['object_height']):
-                $this->imgWBig = $object['object_width'];
-                $this->imgHBig = $object['object_height'];
+             if($object['picture_width'] > $object['picture_height']):
+                $this->imgWBig = $object['picture_width'];
+                $this->imgHBig = $object['picture_height'];
              else:
-                $this->imgWBig = $object['object_height'];
-                $this->imgHBig = $object['object_width'];
+                $this->imgWBig = $object['picture_height'];
+                $this->imgHBig = $object['picture_width'];
              endif;
           endif;
 
           // vertical
           if($this->imgHSm > $this->imgWSm):
-             if($object['object_height'] > $object['object_width']):
-                $this->imgWBig = $object['object_width'];
-                $this->imgHBig = $object['object_height'];
+             if($object['picture_height'] > $object['picture_width']):
+                $this->imgWBig = $object['picture_width'];
+                $this->imgHBig = $object['picture_height'];
              else:
-                $this->imgWBig = $object['object_height'];
-                $this->imgHBig = $object['object_width'];
+                $this->imgWBig = $object['picture_height'];
+                $this->imgHBig = $object['picture_width'];
              endif;
           endif;
 
           // square
           if($this->imgWSm == $this->imgHSm):
-             $this->imgWBig = $object['object_width'];
-             $this->imgHBig = $object['object_height'];
+             $this->imgWBig = $object['picture_width'];
+             $this->imgHBig = $object['picture_height'];
           endif;
 
           // $imgWBig = ; $this->imgWBig
           // $imgHBig = ; $this->imgHBig
-          $this->titlePage = $this->fullName.' <span>print</span> #<id>'.$id.'</id> - W:'.$this->imgWSm.' x H:'.$this->imgHSm.' '.$this->imgWBig.'x'.$this->imgHBig.' '.$this->imageName;
+          $this->titlePage = $this->fullName.' <span>print</span> #<id>'.$id.'</id>';
           $this->breadPage = $this->fullName.' <product></product> #<id>'.$id.'</id>';
           $this->id = $id;
           $sql = "SELECT * FROM __products WHERE visib = 1 ORDER By rating ASC";

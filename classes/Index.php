@@ -14,26 +14,10 @@ class Index extends Mysql {
   public function __construct(){
     
          $this->logoMessage = 'Online print store';
-         $this->randName = $this->getRowValue("SELECT object_name FROM __celebrity WHERE c_id = $this->category AND active=1 ORDER BY RAND() LIMIT 1","object_name");
-         $this->topMenu = $this->getArray("SELECT * FROM __menu_header");
-         $this->bottomMenu = $this->getArray("SELECT * FROM __menu_footer");
+         $this->randName = $this->getRowValue("SELECT celebrity_name FROM __celebrity WHERE celebrity_category_id = $this->category AND celebrity_active=1 ORDER BY RAND() LIMIT 1","celebrity_name");
+         $this->topMenu = $this->getArray("SELECT category_id,category_url,category_name,category_h1,category_tail,category_rating FROM __category WHERE category_type = 1 AND category_active = 1 ORDER By category_rating ASC");
+         $this->bottomMenu = $this->getArray("SELECT category_url,category_name FROM __category WHERE category_type = 2 AND category_active = 1 ORDER By category_rating ASC");
          $this->bottomMessage = 'Online print store &copy; 2009-'.date('Y').' idPoster.com';
          $this->discMessage = 'Christmas Discount | - 25 % OFF | coupon: SAVE25';
-         
-         
-                   if(isset($_SESSION['cart'])):
-                    $ItemTotalPrice=0;
-                    $abc = $_SESSION['cart'];
-                    if(count($abc)>0):
-                        foreach($abc as $base_key => $base_value):
-                                $ItemTotalPrice += $abc[$base_key][0];
-                        endforeach;
-                    endif;
-                  else:
-                    $ItemTotalPrice=0;
-                  endif;
-         
   }
-  
 }
-?>

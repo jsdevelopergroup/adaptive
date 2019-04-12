@@ -18,7 +18,17 @@ session_start();
 
    $index = new Index();
    $metaArray = NULL;
-
+   
+   /*
+   $pos = strpos($_SERVER['REQUEST_URI'], '%20');
+      if($pos === false):
+      else:
+       $str_uri = str_replace('%20','_',$_SERVER['REQUEST_URI']);
+       header("HTTP/1.1 301 Moved Permanently");
+       header("Location: ".SITE_NAME.$str_uri."");
+       exit;     
+      endif; 
+   */
    // AJAX
    if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'):
       require_once("classes/Ajax.php");
@@ -42,7 +52,7 @@ session_start();
          require_once("classes/Category.php");
          require_once("classes/Navi.php");
          $category = new Category();
-         $navi = new Navi($category->categoryUrl,$category->page,$category->end,$category->sortby);
+         $navi = new Navi($category->categoryUrl,$category->page,$category->end,$category->sortby,$category->sortVar);
          $typePage = $category->typePage;
          $metaArray = $category->metaArray;
       endif;
@@ -73,15 +83,20 @@ session_start();
       
       // 5. STATIC (1.About Us; 2.Products & Materials; 3.Payments; 4.Shipping & Returns; 5.Discounts; 6.Contact Us; 7.Cart; 8.Payment Success; 9.Sitemap)
       if(isset($_GET['static'])):
-      
-         require_once("classes/StatPage.php");
-         $static = new StatPage($mysql);
-         
+         require_once("classes/StaticPage.php");
+         $static = new StaticPage();
          $typePage = $static->typePage;
          $metaArray = $static->metaArray; 
-         
-                 
-         
+      endif;
+      
+      // 6.SEARCH
+      if(isset($_GET['searchQuery'])):
+         require_once("classes/Search.php");
+         require_once("classes/Navi.php");
+         $category = new Search();
+         $navi = new Navi($category->categoryUrl,$category->page,$category->end,$category->sortby,$category->delim);
+         $typePage = $category->typePage;
+       
       endif;
       
    endif;

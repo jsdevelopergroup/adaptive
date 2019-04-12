@@ -2,34 +2,30 @@
 
 class Name extends Mysql {
     
-   public $typePage; 
-
-   public $titlePage;
+   public $celebrityH1;
+   public $celebrityName;
+   public $celebrityNameDelim;
+   public $celebrityParent;
+   public $celebrityFullUrlName;
+   public $celebrityText;
+   
+   public $arraySorting;
+   public $totalItems;
+   public $allItems;
+   public $metaArray = array();
+   
+   public $listJsonProducts;
    
    public $categoryUrl;
    public $categoryName;
-   public $objectName;
-   public $objectName_delim;
-   public $objectParent;
    
-   public $arraySorting;
-   public $fullUrlName;
-   
-   public $totalItems;
- 
-   public $metaArray = array();
-   public $seoText;
-   public $listJsonProducts;
+   public $typePage;
    
    public function __construct(){
 
    $page_num = '';
    $sorter = '';
-   
-   // phpinfo();
-   // name=Katy-Perry
-   // REQUEST_URI /Katy-Perry-posters-and-prints/
-   
+ 
    if($_GET['sortby'] != ''):
       $sort_num = '| sortby: '.str_replace('_',' ',$_GET['sortby']).' inch';
       $sortid = $_GET['sortby'];
@@ -38,7 +34,7 @@ class Name extends Mysql {
    $page = (int)$_GET['page'];
    $str_uri = SITE_NAME.$_SERVER['REQUEST_URI'];
    
-   // /Emily-Ratajkowski-posters-and-prints/
+   /// Emily-Ratajkowski-posters-and-prints/
    $redirect_data = '-posters-and-prints';
    $redirect_url = str_replace('_','-',str_replace(' ','-',$_SERVER['REDIRECT_URL']));
    
@@ -66,11 +62,7 @@ class Name extends Mysql {
    endif;
    
    if($page > 0):
-      // _SERVER["REQUEST_URI"]
-      // /Sofia_Vergara/?sortby=old&page=2
-      // _SERVER["REDIRECT_URL"]
-      // /Sofia_Vergara/  
-     if($sortid != ''):
+      if($sortid != ''):
         if($sortid == 'new'):
            header("HTTP/1.1 301 Moved Permanently");
            header("Location: ".$str_redirect."");
@@ -81,11 +73,11 @@ class Name extends Mysql {
            header("Location: ".$str_redirect."");
            exit;            
         endif;
-     else:   
+      else:   
         header("HTTP/1.1 301 Moved Permanently");
         header("Location: ".$str_redirect."");
         exit;        
-     endif;
+      endif;
    else:
      if($sortid != ''):
         if($sortid == 'new'):
@@ -119,29 +111,30 @@ class Name extends Mysql {
    
    // Emily_Ratajkowski
    $url_name = str_replace('-','_',str_replace($redirect_data,'',$_GET["name"]));
-   $this->objectName_delim = $url_name;
+   $this->celebrityNameDelim = $url_name;
    
    // Emily-Ratajkowski-posters-and-prints
-   $this->fullUrlName = str_replace('_','-',$url_name).$redirect_data; 
- 
-   $main_sql = "SELECT id,object_parent,object_name,title,description,text,c_id,views FROM __celebrity WHERE active=1 AND object_name='".$query_posters."' LIMIT 1";
-   $resArray = $this->getOneRow($main_sql);
+   $this->celebrityFullUrlName = str_replace('_','-',$url_name).$redirect_data; 
+   // celebrityRecord_
+   $main_sql = "SELECT celebrity_id,celebrity_parent,celebrity_name,celebrity_title,celebrity_description,celebrity_text,celebrity_category_id,celebrity_view FROM __celebrity WHERE celebrity_active=1 AND celebrity_name='".$query_posters."' LIMIT 1";
+   $celebrityRecord = $this->getOneRow($main_sql);
    
    // echo count($resArray).' - '.$main_sql;
    // print_r($resArray);
-   if(count($resArray) < 2):
-      $main_sql = "SELECT id,object_parent,object_name,title,description,text,c_id,views FROM __celebrity WHERE active=1 AND object_dash='".$query_posters."' LIMIT 1";
-      $resArray = $this->getOneRow($main_sql);
+   if(count($celebrityRecord) < 2):
+      $main_sql = "SELECT celebrity_id,celebrity_parent,celebrity_name,celebrity_title,celebrity_escription,celebrity_text,celebrity_category_id,celebrity_view FROM __celebrity WHERE celebrity_active=1 AND celebrity_dash='".$query_posters."' LIMIT 1";
+      $celebrityRecord = $this->getOneRow($main_sql);
    endif;
    
-   if(count($resArray) > 1):
+   if(count($celebrityRecord) > 1):
    
       // $last_modified_time = strtotime($element["time_update"]);
-      $object_name = $resArray["object_name"];
-      $this->objectParent = $resArray["object_parent"];
-      $object_view = $resArray['views']+1;
-      $object_id = $resArray["id"];
-      $object_category = $resArray["c_id"];
+      $celebrityName = $celebrityRecord["celebrity_name"];
+      $this->celebrityParent = $celebrityRecord["celebrity_parent"];
+      $celebrityParent = $celebrityRecord["celebrity_parent"];
+      $celebrityView = $celebrityRecord['celebrity_view']+1;
+      $celebrityId = $celebrityRecord["celebrity_id"];
+      $celebrityCategoryId = $celebrityRecord["celebrity_category_id"];
       
       $tmpProducts = $this->getArray('SELECT hash,title FROM __products WHERE visib = 1 ORDER By rating ASC');
       $this->listJsonProducts = array();
@@ -151,77 +144,67 @@ class Name extends Mysql {
       endforeach;
       
       $this->listJsonProducts = json_encode($this->listJsonProducts);
-    
-      $sql_update = "UPDATE object_name SET views = '$object_view' WHERE id = '$object_id'";
+      $sql_update = "UPDATE celebrity_name SET celebrity_view = '$celebrityView' WHERE celebrity_id = '$celebrityId'";
       $this->getQuery($sql_update);
       
       // og data
-      $object_og_row = $this->getOneRow("SELECT object_picture_banner,folder FROM __picture WHERE object_parent = $this->objectParent AND object_active = 1 ORDER BY object_view DESC LIMIT 1");
-      $og_image = SITE_NAME.'/img/bigs/'.$object_og_row['folder'].'/'.$object_og_row['object_picture_banner'];             
+      $object_og_row = $this->getOneRow("SELECT picture_big,picture_dir_big FROM __picture WHERE picture_parent = $celebrityParent AND picture_active = 1 ORDER BY picture_view DESC LIMIT 1");
+      $og_image = SITE_NAME.'/img/bigs/'.$object_og_row['picture_dir_big'].'/'.$object_og_row['picture_big'];             
       $og_url = $str_uri;
               
       // category data
-      $element_category = $this->getOneRow("SELECT name,url FROM __category WHERE id=$object_category");
-      $this->categoryUrl = $element_category['url'];
-      $this->categoryName = $element_category['name'];
+      $element_category = $this->getOneRow("SELECT category_name,category_url FROM __category WHERE category_id=$celebrityCategoryId");
+      $this->categoryUrl = $element_category['category_url'];
+      $this->categoryName = $element_category['category_name'];
       
       if(!strstr($_SERVER['HTTP_REFERER'],'?sortby')===FALSE):
-      
          if(!strstr($_SERVER['HTTP_REFERER'],'&page')===FALSE):
             $this->categoryUrl = $_SERVER['HTTP_REFERER'];
          else:
             $this->categoryUrl = $_SERVER['HTTP_REFERER'];
          endif;
-         
       else:
-      
          $this->categoryUrl = SITE_NAME.'/'.$this->categoryUrl.'/';
-         
       endif;
       
       if($sortid != ''):
-      
          $_SESSION['sort'] = $sortid;
-         
-         if($_SESSION['sort'] == 'new') $_SESSION['sortid'] = 'ORDER BY object_id DESC';
-         if($_SESSION['sort'] == 'old') $_SESSION['sortid'] = 'ORDER BY object_id ASC';
-         if($_SESSION['sort'] == 'most_popular') $_SESSION['sortid'] = 'ORDER BY object_view DESC';
+         if($_SESSION['sort'] == 'new') $_SESSION['sortid'] = 'ORDER BY picture_id DESC';
+         if($_SESSION['sort'] == 'old') $_SESSION['sortid'] = 'ORDER BY picture_id ASC';
+         if($_SESSION['sort'] == 'most_popular') $_SESSION['sortid'] = 'ORDER BY picture_view DESC';
 
          if($_SESSION['sort'] == '42x60'): 
-            $_SESSION['sortid'] = 'AND (((object_height >= "4000") OR (object_width >= "4000")) OR (object_height >= "2800" AND object_width >= "2800")) ORDER BY object_view ASC';
+            $_SESSION['sortid'] = 'AND (((picture_height >= "4000") OR (picture_width >= "4000")) OR (picture_height >= "2800" AND picture_width >= "2800")) ORDER BY picture_view ASC';
          endif;
 
          if($_SESSION['sort'] == '36x56'):
-            $_SESSION['sortid'] = 'AND (((object_height >= "3800") OR (object_width >= "3800")) OR (object_height >= "2400" AND object_width >= "2400")) ORDER BY object_view ASC';
+            $_SESSION['sortid'] = 'AND (((picture_height >= "3800") OR (picture_width >= "3800")) OR (picture_height >= "2400" AND picture_width >= "2400")) ORDER BY picture_view ASC';
          endif;
 
          if($_SESSION['sort'] == '32x46'): 
-            $_SESSION['sortid'] = 'AND (((object_height >= "3200") OR (object_width >= "3200")) OR (object_height >= "2200" AND object_width >= "2200")) ORDER BY object_view ASC';
+            $_SESSION['sortid'] = 'AND (((picture_height >= "3200") OR (picture_width >= "3200")) OR (picture_height >= "2200" AND picture_width >= "2200")) ORDER BY picture_view ASC';
          endif;
       
          if($_SESSION['sort'] == '24x36'): 
-            $_SESSION['sortid'] = 'AND (((object_height >= "2400") OR (object_width >= "2400")) OR (object_height >= "1600" AND object_width >= "1600")) ORDER BY object_view ASC';
+            $_SESSION['sortid'] = 'AND (((picture_height >= "2400") OR (picture_width >= "2400")) OR (picture_height >= "1600" AND picture_width >= "1600")) ORDER BY picture_view ASC';
          endif;
       
          if($_SESSION['sort'] == '18x24'):
-            $_SESSION['sortid'] = 'AND (((object_height >= "1500") OR (object_width >= "1500")) OR (object_height >= "1100" AND object_width >= "1100")) ORDER BY object_view ASC';
+            $_SESSION['sortid'] = 'AND (((picture_height >= "1500") OR (picture_width >= "1500")) OR (picture_height >= "1100" AND picture_width >= "1100")) ORDER BY picture_view ASC';
          endif;
-         
          $canonical = SITE_NAME.'/'.$this->fullUrlName.'/';
-         
       else:
-      
          if($sortid == ''):
             $_SESSION['sort'] = 'new';
-            $_SESSION['sortid'] = 'ORDER BY object_id DESC';
-            $this->seoText = $resArray["text"];
+            $_SESSION['sortid'] = 'ORDER BY picture_id DESC';
+            $this->celebrityText = str_replace('[name]',$celebrityName,$celebrityRecord["celebrity_text"]);
             $canonical = NULL;             
          endif;
-         
       endif;
   
-      $count_items = $this->getRowValue("SELECT COUNT(*) as count FROM __picture WHERE object_parent=$this->objectParent AND object_active=1","count");
-      $this->totalItems = $this->getRowValue("SELECT COUNT(*) as count FROM __picture WHERE object_parent=$this->objectParent AND object_active=1 ".$_SESSION['sortid'],"count");
+      $count_items = $this->getRowValue("SELECT COUNT(*) as count FROM __picture WHERE picture_parent=$celebrityParent AND picture_active=1","count");
+      $this->allItems = $count_items;
+      $this->totalItems = $this->getRowValue("SELECT COUNT(*) as count FROM __picture WHERE picture_parent=$celebrityParent AND picture_active=1 ".$_SESSION['sortid'],"count");
       
       $array_sorting = array();
       $array_sorting[] = array('name'=>'NEW','value'=>'new','count'=>$count_items,'type'=>'sort');
@@ -229,7 +212,7 @@ class Name extends Mysql {
       $array_sorting[] = array('name'=>'POPULAR','value'=>'most-popular','count'=>$count_items,'type'=>'sort');
       
       // 18x24
-      $s = "SELECT object_id FROM __picture WHERE object_parent=$this->objectParent AND (((object_height >= 1500) OR (object_width >= 1500)) OR (object_height >= 1100 AND object_width >= 1100))";
+      $s = "SELECT picture_id FROM __picture WHERE picture_parent=$celebrityParent AND (((picture_height >= 1500) OR (picture_width >= 1500)) OR (picture_height >= 1100 AND picture_width >= 1100))";
       $r = mysql_query($s);
       if(mysql_num_rows($r)>0):
          $n=mysql_num_rows($r);
@@ -237,16 +220,16 @@ class Name extends Mysql {
       endif;
            
       // 24x36
-      $s = "SELECT object_id FROM __picture WHERE object_parent=$this->objectParent AND (((object_height >= 2400) OR (object_width >= 2400)) OR (object_height >= 1600 AND object_width >= 1600))";
+      $s = "SELECT picture_id FROM __picture WHERE picture_parent=$celebrityParent AND (((picture_height >= 2400) OR (picture_width >= 2400)) OR (picture_height >= 1600 AND picture_width >= 1600))";
       $r = mysql_query($s);if(mysql_num_rows($r)>0){$n=mysql_num_rows($r);$array_sorting[] = array("name"=>"24x36","value"=>"24x36","count"=>$n,"type"=>"filt");}
       // 32x46
-      $s = "SELECT object_id FROM __picture WHERE object_parent=$this->objectParent AND (((object_height >= 3200) OR (object_width >= 3200)) OR (object_height >= 2200 AND object_width >= 2200))";
+      $s = "SELECT picture_id FROM __picture WHERE picture_parent=$celebrityParent AND (((picture_height >= 3200) OR (picture_width >= 3200)) OR (picture_height >= 2200 AND picture_width >= 2200))";
       $r = mysql_query($s);if(mysql_num_rows($r)>0){$n=mysql_num_rows($r);$array_sorting[] = array("name"=>"32x46","value"=>"32x46","count"=>$n,"type"=>"filt");}  
       // 36x56
-      $s = "SELECT object_id FROM __picture WHERE object_parent=$this->objectParent AND (((object_height >= 3800) OR (object_width >= 3800)) OR (object_height >= 2400 AND object_width >= 2400))";
+      $s = "SELECT picture_id FROM __picture WHERE picture_parent=$celebrityParent AND (((picture_height >= 3800) OR (picture_width >= 3800)) OR (picture_height >= 2400 AND picture_width >= 2400))";
       $r = mysql_query($s);if(mysql_num_rows($r)>0){$n=mysql_num_rows($r);$array_sorting[] = array("name"=>"36x56","value"=>"36x56","count"=>$n,"type"=>"filt");}  
       // 42x60
-      $s = "SELECT object_id FROM __picture WHERE object_parent=$this->objectParent AND (((object_height >= 4000) OR (object_width >= 4000)) OR (object_height >= 2800 AND object_width >= 2800))";
+      $s = "SELECT picture_id FROM __picture WHERE picture_parent=$celebrityParent AND (((picture_height >= 4000) OR (picture_width >= 4000)) OR (picture_height >= 2800 AND picture_width >= 2800))";
       $r = mysql_query($s);if(mysql_num_rows($r)>0){$n=mysql_num_rows($r);$array_sorting[] = array("name"=>"42x60","value"=>"42x60","count"=>$n,"type"=>"filt");}
  
       $string_sizes = '';
@@ -274,23 +257,23 @@ class Name extends Mysql {
       $all_items = ($sort_num != '') ? $n : $count_items; 
       $all_items = ' : '.$all_items.' '.$items;
  
-      if($element["title"]==''):
-         $title = $object_name.' posters and prints at idPoster.com '.$sort_num.$all_items;
+      if($element["celebrity_title"]==''):
+         $title = $celebrityName.' posters and prints at idPoster.com '.$sort_num.$all_items;
       else:
-         $title = $element["title"].' '.$sort_num.$all_items;
+         $title = $element["celebrity_title"].' '.$sort_num.$all_items;
       endif;
       
-      if($element["description"]!=''):
-         $description = $element["description"].' '.$sort_num.$all_items;
+      if($element["celebrity_description"]!=''):
+         $description = $element["celebrity_description"].' '.$sort_num.$all_items;
       else:
-         $description = $object_name.' posters and prints at IdPoster.com. Buy '.$object_name.' posters'.$sizes_description.', photos, puzzles, mousepads, magnets, t-shirts, pillows, images, mugs, cases for iPhone, iPad, Samsung '.$sort_num.$all_items;
+         $description = $celebrityName.' posters and prints at IdPoster.com. Buy '.$celebrityName.' posters'.$sizes_description.', photos, puzzles, mousepads, magnets, t-shirts, pillows, images, mugs, cases for iPhone, iPad, Samsung '.$sort_num.$all_items;
       endif;
       
-      $keywords = $object_name.', posters, prints';
-      $this->objectName = $object_name;
+      $keywords = $celebrityName.', posters, prints';
+      $this->celebrityName = $celebrityName;
       $sort_size = ($_SESSION['sort'] != 'new' AND $_SESSION['sort'] != 'old' AND $_SESSION['sort'] != 'most-popular') ? '('.$_SESSION['sort'].') ' : '';
       
-      $this->titlePage = $object_name.' posters and prints : '.$sort_size.$this->totalItems.' items';      
+      $this->celebrityH1 = $celebrityName.' posters and prints : '.$sort_size.$this->totalItems.' items';      
       $this->typePage = 'name';
       
       $this->metaArray[] = $title;
